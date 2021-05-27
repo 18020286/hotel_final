@@ -1,0 +1,103 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+{{ post.title }}
+{% endblock title %}
+
+{% block css %}
+<style>
+.post-entry-sidebar img{
+    width:100px;
+    height:70px
+}
+.post-entry-sidebar a{
+    display: flex;
+    align-items: flex-start;
+}
+.post-entry-sidebar .text{
+    flex: 1;
+    color: black;
+}
+.post-entry-sidebar .text:hover{
+    color: #5bc3d5;
+}
+
+.post_content{
+    text-align: justify;
+}
+
+</style>
+{% endblock css %}
+
+{% block content %}
+    {% comment %} <div class="container"> {% endcomment %}
+        <div class="row justify-content-around">
+            <div class="col-md-12 col-lg-8">
+                <div class="post-content-body">
+
+                    <h1> {{ post.title }} </h1>
+                    <small class="post-meta">Posted by <a href="{% url 'sort_author' post.author.id %} ">{{ post.author }}</a>
+                    on <a href="#">{{ post.date.date }} </a>
+                    </small>
+                    <hr>
+                    <p class='post_content'>
+                    {{ post.content}}
+                    </p>
+                    <img src="{{ post.image.url }}" alt="Image placeholder" class="img-fluid rounded">
+                </div>
+                <div class="pt-5">
+                    <p>Categories: <a href="#">{{ post.get_category_display}}</a></p>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-lg-3 pt-lg-5 mt-lg-5">
+                <div class="sidebar-box">
+                    <h3 class="heading">Recently Posts</h3>
+                    <div class="post-entry-sidebar pl-lg-2">
+                        {% for new_post in newest %}
+                                <a href='{% url "post" new_post.id %}' class='non-decoration'>
+                                    <img class="mr-3" src="{{ new_post.image.url }}" alt="Image placeholder"/>
+                                    <div class="title mt-2">
+                                        <h5 class='mb-0'>{{ new_post.title }} </h5>
+                                        <small>{{ new_post.date.date }} </small>
+                                    </div>
+                                </a>
+                                <br>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="sidebar-box">
+                    <h3 class="heading">Categories</h3>
+                    <ul class="categories">
+                        <li><a href='{% url "sort_category" "food" %}'>Food </a></li>
+                        <li><a href='{% url "sort_category" "travel" %}'>Travel</a></li>
+                        <li><a href='{% url "sort_category" "service" %}'>Service</a></li>
+                        {% comment %}<li><a href="#">Business <span>(42)</span></a></li>
+                        <li><a href="#">Adventure <span>(14)</span></a></li>{% endcomment %}
+                    </ul>
+                </div>
+{% comment %}
+                <div class="sidebar-box">
+                    <h3 class="heading">Tags</h3>
+                    <ul class="tags">
+                        <li><a href="#">Travel</a></li>
+                        <li><a href="#">Adventure</a></li>
+                        <li><a href="#">Food</a></li>
+                        <li><a href="#">Lifestyle</a></li>
+                        <li><a href="#">Business</a></li>
+                        <li><a href="#">Freelancing</a></li>
+                        <li><a href="#">Travel</a></li>
+                        <li><a href="#">Adventure</a></li>
+                        <li><a href="#">Food</a></li>
+                        <li><a href="#">Lifestyle</a></li>
+                        <li><a href="#">Business</a></li>
+                        <li><a href="#">Freelancing</a></li>
+                    </ul>
+                </div>{% endcomment %}
+            </div>
+
+        </div>
+    </div>
+
+{% endblock content %}

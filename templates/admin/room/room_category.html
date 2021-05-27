@@ -1,0 +1,65 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block title %}
+    Room Category Page
+{% endblock %}
+
+{% block content %}
+    <div class="container px-5">
+        <div>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="text-center alert alert-{{ message.tags }}">
+                        {{ message|safe }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <section class="">
+            <h1 class="text-center text-darkgold pb-5">Room Type</h1>
+            <div>
+                <a class="btn btn-darkgold mb-2 mt-4" href="{% url 'add_category' %}">Add New Type</a>
+            </div>
+            <table class="table table-striped text-center">
+                <thead>
+                <th class='align-middle'>Room Category</th>
+                <th class='align-middle'>Image</th>
+                <th class='align-middle'>Price</th>
+                <th class='align-middle'>Capacity</th>
+                <th class='align-middle'>Area</th>
+                <th width="400" class='align-middle'>Description</th>
+                <th class='align-middle'>Actions</th>
+                </thead>
+                {#            {% if rooms %}#}
+                {% for room in rooms %}
+                    <tr>
+                        <td width=100 class='align-middle'>{{ room.room_type }}</td>
+                        <td>
+                        {% for image in images %}
+                            {% if image.room_type == room and image.image%}
+                                <img src="{{ image.image.url}}" width="200" height='140' class='py-2'>
+                            {% endif %}
+                        {% endfor %}
+                        </td>
+
+
+                        <td class='align-middle' width=80>&euro; {{ room.price }}</td>
+                        <td class='align-middle'>{{ room.get_num_person_display }}</td>
+                        <td class='align-middle'>{{ room.area }}</td>
+                        <td class='align-middle'>{{ room.description }}</td>
+                        <td class='align-middle'>
+                            <a href="{% url 'edit_category' room.id %}">
+                                <Button class="btn btn-primary">Edit</Button>
+                            </a>
+                            <a href="{% url 'room_category' %}?room_number={{ room.id }}">
+                                <Button class="btn btn-danger">Delete</Button>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                {#            {% endif %}#}
+
+            </table>
+        </section>
+    </div>
+{% endblock %}

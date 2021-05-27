@@ -1,0 +1,72 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block title %}
+    Reservation Management Page
+{% endblock %}
+
+
+{% block css %}
+
+{% endblock css %}
+
+
+{% block content %}
+
+    <div class="container px-5">
+        <div>
+            {% if messages %}
+            {% for message in messages %}
+                <div class="text-center alert alert-{{ message.tags }}">
+                    {{ message|safe }}
+                </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="">
+            <h1 class='text-center text-darkgold pb-5'>Reservation Management</h1>
+        </div>
+        <table class="table text-center" id="table">
+            <thead>
+            <tr>
+                <th>Guest</th>
+                <th>Room</th>
+                <th>Check In</th>
+                <th>Check Out</th>
+                <th>Transaction Date</th>
+                <th>Total Price</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for reservation in reservations %}
+                <tr class="{% if reservation.reservation_status == 'cancel' %}
+                        bg-danger
+                        {% endif %}">
+                <td><a href=''>{{ reservation.user_id.first_name }} {{ reservation.user_id.last_name }}<a></td>
+                <td>{{ reservation.room_number.room_type }} {{ reservation.room_number.room_number}}</td>
+                <td>{{reservation.date_from }}</td>
+                <td>{{reservation.date_to }}</td>
+                <td>{{reservation.trading_code }}</td>
+                <td>${{ reservation.cost}}</td>
+                <td>{{ reservation.get_status_display }}</td>
+                                <td>
+                {% if reservation.status == 'confirmed' %}
+                    <a href="{% url 'reservation_management' %}?status=checkedin&id={{ reservation.id }}" class="btn btn-success text-white bt-xs">Check in</a>
+                    <a href="{% url 'reservation_management' %}?status=cancel&id={{ reservation.id }}" class="btn btn-danger text-white bt-xs">Cancel</a>
+                {% elif reservation.status == 'checkedin'%}
+                    <a href="{% url 'reservation_management' %}?status=completed&id={{ reservation.id }}" class="btn btn-info text-white bt-xs">Check out</a>
+                {% elif reservation.status == 'pending' %}
+                    <a href="{% url 'reservation_management' %}?status=confirmed&id={{ reservation.id }}" class="btn btn-success text-white bt-xs">Confirm</a>
+                    <a href="{% url 'reservation_management' %}?status=cancel&id={{ reservation.id }}" class="btn btn-danger text-white bt-xs">Cancel</a>
+                {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+

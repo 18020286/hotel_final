@@ -1,0 +1,325 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block title %}
+    Room Management Page
+{% endblock %}
+
+{% block css %}
+    <style>
+        .progress {
+            width: 150px;
+            height: 150px;
+            background: none;
+            position: relative;
+        }
+
+        .progress::after {
+            content: "";
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 6px solid #eee;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .progress > span {
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            position: absolute;
+            top: 0;
+            z-index: 1;
+        }
+
+        .progress .progress-left {
+            left: 0;
+        }
+
+        .progress .progress-bar {
+            width: 100%;
+            height: 100%;
+            background: none;
+            border-width: 6px;
+            border-style: solid;
+            position: absolute;
+            top: 0;
+        }
+
+        .progress .progress-left .progress-bar {
+            left: 100%;
+            border-top-right-radius: 80px;
+            border-bottom-right-radius: 80px;
+            border-left: 0;
+            -webkit-transform-origin: center left;
+            transform-origin: center left;
+        }
+
+        .progress .progress-right {
+            right: 0;
+        }
+
+        .progress .progress-right .progress-bar {
+            left: -100%;
+            border-top-left-radius: 80px;
+            border-bottom-left-radius: 80px;
+            border-right: 0;
+            -webkit-transform-origin: center right;
+            transform-origin: center right;
+        }
+
+        .progress .progress-value {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+
+        body {
+            min-height: 100vh;
+        }
+
+        .rounded-lg {
+            border-radius: 1rem;
+        }
+
+        .text-gray {
+            color: #aaa;
+        }
+
+        div.h4 {
+            line-height: 1rem;
+        }
+        #text{
+            display:none;
+        }
+        .swich-page {
+            font-size: 20px;
+            font-weight: bolder;
+            color: dodgerblue;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+    <div class="container px-5">
+        <div>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="text-center alert alert-{{ message.tags }}">
+                        {{ message|safe }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <section class="mt-5">
+            {% load app_tags %}
+            <h2 class="text-center text-darkgold pb-5">Room Status</h2>
+            <div class="container-fluid pb-5">
+                <div class="row">
+                    <div class="col-xl-3 col-lg-6 col-sm-12 mb-4 ">
+                        <div class="bg-white rounded-lg py-5 shadow">
+                            <h2 class="h6 font-weight-bold text-center mb-4">Total Rooms</h2>
+                            <!-- Progress bar 1 -->
+                            <div class="progress mx-auto" data-value={{ total_rooms|percentage:total_rooms }}>
+                        <span class="progress-left">
+                                    <span class="progress-bar border-primary"></span>
+                        </span>
+                                <span class="progress-right">
+                                    <span class="progress-bar border-primary"></span>
+                        </span>
+                                <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+                                    <div class="h2 font-weight-bold">{{ total_rooms }}</div>
+                                </div>
+                            </div>
+                            <!-- END -->
+
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-lg-6 col-sm-12 mb-4">
+                        <div class="bg-white rounded-lg py-5 shadow">
+                            <h2 class="h6 font-weight-bold text-center mb-4">Available Rooms</h2>
+
+                            <!-- Progress bar 2 -->
+                            <div class="progress mx-auto" data-value={{ available|percentage:total_rooms }}>
+                        <span class="progress-left">
+                                    <span class="progress-bar border-success"></span>
+                        </span>
+                                <span class="progress-right">
+                                    <span class="progress-bar border-success"></span>
+                        </span>
+                                <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+                                    <div class="h2 font-weight-bold">{{ available }}</div>
+                                </div>
+                            </div>
+                            <!-- END -->
+
+
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-lg-6 col-sm-12 mb-4">
+                        <div class="bg-white rounded-lg py-5 shadow">
+                            <h2 class="h6 font-weight-bold text-center mb-4">Not Available</h2>
+
+                            <!-- Progress bar 3 -->
+                            <div class="progress mx-auto" data-value={{ unavailable|percentage:total_rooms }}>
+                        <span class="progress-left">
+                                    <span class="progress-bar border-danger"></span>
+                        </span>
+                                <span class="progress-right">
+                                    <span class="progress-bar border-danger"></span>
+                        </span>
+                                <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+                                    <div class="h2 font-weight-bold">{{ unavailable }}</div>
+                                </div>
+                            </div>
+                            <!-- END -->
+
+
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-lg-6 col-sm-12 mb-4">
+                        <div class="bg-white rounded-lg py-5 shadow">
+                            <h2 class="h6 font-weight-bold text-center mb-4">Total CheckedIn</h2>
+
+                            <!-- Progress bar 4 -->
+                            <div class="progress mx-auto" data-value='{{ checkedIn|percentage:total_rooms }}'>
+                        <span class="progress-left">
+                                    <span class="progress-bar border-warning"></span>
+                        </span>
+                                <span class="progress-right">
+                                    <span class="progress-bar border-warning"></span>
+                        </span>
+                                <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+                                    <div class="h2 font-weight-bold">{{ checkedIn }}</div>
+                                </div>
+                            </div>
+                            <!-- END -->
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <h1 class="text-center pb-3 text-darkgold">Rooms Details</h1>
+        <div class="row">
+            <div class="col">
+                <div class="card card-body">
+                    <form method="get">
+                        {{ myFilter.form }}
+                        <button class="btn btn-darkgold" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <a class="btn btn-darkgold mb-1"  href="{% url 'add_room' %}">Add New Room</a>
+        <table class="table table-striped ">
+            <thead>
+            <th>Room Number</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Price</th>
+            <th>Capacity</th>
+            <th width="200">Actions</th>
+
+            </thead>
+            {#            {% if rooms %}#}
+            {% for room in rooms %}
+                <tr class="{% if room.status == 'need clean' or room.status == 'broken' %}
+                        bg-danger
+                        {% elif room.status == 'using' %}
+                        bg-info
+                        {% endif %}" >
+                    <td>{{ room.room_number }}</td>>
+                    <td>{{ room.room_type }}</td>
+                    <td>{{ room.get_status_display }}</td>
+                    <td>&euro; {{ room.room_type.price }}</td>
+                    <td>{{ room.room_type.num_person }}</td>
+                    <td>
+                        {% if room.status == 'using' %}
+                            <a href="{% url 'admin-room' %}?room_id={{ room.room_number }}&status=checked-out">
+                                <Button class="btn btn-primary">Check Out</Button>
+                            </a>
+                        {% elif room.status == 'available' %}
+                            <a href="{% url 'admin-room' %}?room_id={{ room.room_number }}&status=checked-in">
+                                <Button class="btn btn-success text-white">Check In</Button>
+                            </a>
+                            <a href="{% url 'admin-room' %}?room_id={{ room.room_number }}&status=broken">
+                                <Button class="btn btn-warning text-white">Broken</Button>
+                            </a>
+                            <a href="{% url 'admin-room' %}?id={{ room.room_number }}&action=delete">
+                                <Button class="btn btn-danger text-white">Delete</Button>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'admin-room' %}?room_id={{ room.room_number }}&status=available">
+                                <Button class="btn btn-success text-white">Ready</Button>
+                            </a>
+                            <a href="{% url 'admin-room' %}?id={{ room.room_number }}&action=delete">
+                                <Button class="btn btn-danger text-white">Delete</Button>
+                            </a>
+                        {% endif %}
+
+
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+
+    <nav class="row justify-content-center">
+        <span class="col-sm-2 text-right">
+        {% if rooms.has_previous %}
+            <a class="swich-page" href="?page={{ rooms.previous_page_number }}"><i class="fas fa-backward"></i> Previous</a>
+        {% endif %}
+        </span>
+
+        <span class="col-sm-2 text-center">
+            Page {{ rooms.number }} of {{ rooms.paginator.num_pages }}.
+        </span>
+        <span class='col-sm-2'>
+        {% if rooms.has_next %}
+            <a class="swich-page" href="?page={{ rooms.next_page_number }}">Next <i class="fas fa-forward"></i></a>
+        {% endif %}
+        </span>
+        </nav>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(function () {
+
+            $(".progress").each(function () {
+
+                var value = $(this).attr('data-value');
+                var left = $(this).find('.progress-left .progress-bar');
+                var right = $(this).find('.progress-right .progress-bar');
+
+                if (value > 0) {
+                    if (value <= 50) {
+                        right.css('transform', 'rotate(' + percentageToDegrees(value) + 'deg)')
+                    } else {
+                        right.css('transform', 'rotate(180deg)')
+                        left.css('transform', 'rotate(' + percentageToDegrees(value - 50) + 'deg)')
+                    }
+                }
+
+            })
+
+            function percentageToDegrees(percentage) {
+
+                return percentage / 100 * 360
+
+            }
+
+        });
+    </script>
+{% endblock %}

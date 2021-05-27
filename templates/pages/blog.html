@@ -1,0 +1,90 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block title %} Blog page
+{% endblock %} {% block css %}
+
+<style>
+    .blog-list .media .title a {
+        color: #292929;
+        font-weight: bold;
+    }
+    .blog-list .media .title a:hover {
+        color: darkgoldenrod;
+        text-decoration: none;
+    }
+
+    .blog-list .post-meta a{
+
+    }
+
+
+    .media {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .blog-list .media .post-thumb {
+        width: 240px;
+        height: 160px;
+        border-radius: 2px;
+    }
+    .blog-list .media .intro {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-align: justify;
+    }
+
+    .media-body {
+        flex: 1;
+    }
+
+    .swich-page{
+    font-size: 20px;
+    font-weight: bolder;
+    color: dodgerblue;
+}
+
+</style>
+{% endblock css %}
+{% block content %}
+        <h1 class='text-center text-darkgold'> Blog </h1>
+        <hr>
+<section class="blog-list p-md-5">
+        
+        {% for post in posts_list %}
+            <div class="media shadow p-3 mb-5 bg-white rounded">
+                <img class="mr-3 img-fluid post-thumb d-none d-md-flex" src="{{ post.image.url }}" alt="image" />
+                <div class="media-body">
+                    <h3 class="title mb-1">
+                        <a href='{% url "post" post.id %}'>{{ post.title }}</a>
+                    </h3>
+                    <small class="post-meta">Posted by <a href="{% url 'sort_author' post.author.id %}">{{ post.author }}</a> on
+                        <a href="">{{ post.date.date }} </a></small>
+                    <p class='intro'>{{ post.content }}</p>
+
+                    <small><a class="more-link" href='{% url "post" post.id %}'>Read more &rarr;</a></small>
+                </div>
+                <!--//media-body-->
+            </div>
+            <!--//media-->
+        <hr>
+        {% endfor %}
+
+        <nav class="row justify-content-center">
+        <span class="col-sm-2 text-right">
+        {% if posts_list.has_previous %}
+            <a class="swich-page" href="?page={{ posts_list.previous_page_number }}"><i class="fas fa-backward"></i> Previous</a>
+        {% endif %}
+        </span>
+
+        <span class="col-sm-2 text-center">
+            Page {{ posts_list.number }} of {{ posts_list.paginator.num_pages }}.
+        </span>
+        <span class='col-sm-2'>
+        {% if posts_list.has_next %}
+            <a class="swich-page" href="?page={{ posts_list.next_page_number }}">Next <i class="fas fa-forward"></i></a>
+        {% endif %}
+        </span>
+        </nav>
+</section>
+{% endblock %}

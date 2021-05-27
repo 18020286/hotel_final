@@ -1,0 +1,38 @@
+{% extends 'admin/admin_base.html' %}
+{% load static %}
+
+{% block title %}
+    Add Blog Page
+{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/form-admin.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+
+{% block content %}
+    <div class="container">
+        <h1 class='text-darkgold'>Create New Blog</h1>
+                    {% if messages %}
+                {% for message in messages %}
+                    <div class="text-center alert alert-{{ message.tags }}">
+                        {{ message|safe }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" class='form-create' enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ post_form.as_p }}
+                <input type="submit" value="Create" class="btn btn-primary">
+            </form>
+
+        <div class="mt-4">
+            <a href="{% url 'admin-blog' %}" class="btn btn-danger float-right">Go Back</a>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block js %}
+{% endblock js %}

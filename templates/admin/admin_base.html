@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static '/css/custom.css' %}">
+    <link href="{% static 'fontawesome_free/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesome_free/css/brands.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesome_free/css/solid.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{% static '/css/footer.css' %}">
+    {% block css %} {% endblock %}
+  </head>
+  <body class='bg-light'>
+    {% include 'admin/admin-nav.html' %}
+
+    <div class="container bg-white py-5 main-content" style="min-height: calc(100vh - 328px);">{% block content %} {% endblock %}</div>
+
+    {% include 'layouts/footer.html' %}
+
+    <div id="footer"></div>
+    <footer>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'js/custom.js' %}"></script>
+      <script script src="{% static 'fontawesome_free/js/all.min.js' %}"></script>
+    {% block js %} {% endblock %}
+    </footer>
+    <a id="back-to-top" href="#" class="btn btn-secondary btn-lg back-to-top" role="button"><i class="fas fa-chevron-up"></i></a>
+
+  </body>
+</html>

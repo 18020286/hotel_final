@@ -1,0 +1,190 @@
+<head>
+{#  <link#}
+{#  rel="stylesheet"#}
+{#  href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"#}
+{#  integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"#}
+{#  crossOrigin="anonymous"#}
+{#/>#}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+  :root {
+    --primary: #08aeea;
+    --secondary: #13D2B8;
+    --purple: #bd93f9;
+    --pink: #ff6bcb;
+    --blue: #8be9fd;
+    --gray: #333;
+    --font: "Poppins", sans-serif;
+    --gradient: linear-gradient(40deg, #ff6ec4, #7873f5);
+    --shadow: 0 0 15px 0 rgba(0,0,0,0.05);
+  }
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
+  html {
+    font-size: 62.5%;
+  }
+
+  body {
+    font-family: var(--font);
+    font-size: 1.4rem;
+    overflow-x: hidden;
+    font-weight: 300;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    font-family: var(--font);
+    font-size: 1.4rem;
+    font-weight: 300;
+    outline: none;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    -webkit-appearance: none;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+          .tab {
+            padding: 2.5rem;
+            border-radius: 1rem;
+            background-color: white;
+            box-shadow: var(--shadow);
+          }
+          .tab-list {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2.5rem;
+          }
+          .tab-item {
+            cursor: pointer;
+            padding: 1.2rem 2rem;
+            border-radius: 5rem;
+            color: #818e9b;
+            background-color: #f4f5f7;
+            text-align: center;
+            white-space: nowrap;
+            font-weight: 500;
+          }
+          .tab-item.active {
+            color: white;
+            background-color: var(--primary);
+            pointer-events: none;
+          }
+          .tab-item:not(:first-child) {
+            margin-left: 1.5rem;
+          }
+          .tab-content {
+            display: none;
+          }
+          .tab-content.active {
+            display: block;
+          }
+          .post {
+            display: flex;
+            align-items: center;
+          }
+          .post:not(:first-child) {
+            margin-bottom: 2rem;
+          }
+          .post-image {
+            width: 8rem;
+            height: 8rem;
+            border-radius: 1rem;
+            object-fit: cover;
+            flex-shrink: 0;
+            margin-right: 2.5rem;
+          }
+          .post-info {
+            flex: 1;
+          }
+          .post-category {
+            color: #818e9b;
+            display: inline-block;
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+          }
+          .post-title {
+            color: #4e4f51;
+            font-weight: 600;
+            font-size: 1.8rem;
+            line-height: 1.4;
+          }
+    </style>
+</head>
+  <body>
+         <div class="tab">
+          <div class="tab-list">
+            <div class="tab-item active" data-tab="1">Popular</div>
+            <div class="tab-item" data-tab="2">Bali</div>
+            <div class="tab-item" data-tab="3">New York</div>
+          </div>
+          <div class="tab-wrapper">
+            <div class="tab-content active" data-tab="1">
+              <div class="post">
+                <img src="/images/outer-space.png" alt="outer space" class="post-image"/>
+                <div class="post-info">
+                  <span class="post-category">Beach</span>
+                  <h3 class="post-title">Cabo San Lucas, Mexico</h3>
+                </div>
+              </div>
+            </div>
+            <div class="tab-content" data-tab="2">
+              <div class="post">
+                <img src="/images/unicorn.png" alt="unicorn" class="post-image"/>
+                <div class="post-info">
+                  <span class="post-category">Unicorn</span>
+                  <h3 class="post-title">Cabo San Lucas, Mexico</h3>
+                </div>
+              </div>
+            </div>
+            <div class="tab-content" data-tab="3">
+              <div class="post">
+                <img src="/images/rachelizmarvel.png" alt="rachelizmarvel" class="post-image"/>
+                <div class="post-info">
+                  <span class="post-category">Hawaii</span>
+                  <h3 class="post-title">Cabo San Lucas, Mexico</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  <script>
+      window.addEventListener("load", function () {
+          const tabs = document.querySelectorAll(".tab-item");
+          const tabsContent = document.querySelectorAll(".tab-content");
+
+          function handleChangeTab(e) {
+            const tabId = e.target.dataset.tab;
+            tabs.forEach((el) => el.classList.remove("active"));
+            e.target.classList.add("active");
+            tabsContent.forEach((el) => {
+              el.classList.remove("active");
+              if (el.getAttribute("data-tab") === tabId) {
+                el.classList.add("active");
+              }
+            });
+          }
+
+          tabs.forEach((el) => el.addEventListener("click", handleChangeTab));
+        });
+  </script>
+  </body>

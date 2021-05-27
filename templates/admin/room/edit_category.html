@@ -1,0 +1,30 @@
+{% extends 'admin/admin_base.html' %}
+{% load static %}
+{% block title %}
+    Edit Category Page
+{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/form-admin.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="text-center text-darkgold pb-5">Edit Category Infomation</h1>
+                <form method="POST" enctype="multipart/form-data" class='form-create px-5'>
+                    {% csrf_token %}
+                    {{ room.as_p }}
+                    {% for image in images %}
+                    <p>
+                        {{ image }}</p>
+                        {% comment %} <img src="{{ image.image.url }}" width="200" height='140' class='py-2'> {% endcomment %}
+                    {% endfor %}
+                    
+                    <input type="submit" value="Update" class="btn">
+                </form>
+        <div class="mt-4">
+            <a href="{% url 'room_category' %}" class="btn btn-danger float-right">Go Back</a>
+        </div>
+
+    </div>
+{% endblock %}

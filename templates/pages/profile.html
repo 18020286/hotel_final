@@ -1,0 +1,241 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %}
+Profile
+{% endblock title %}
+{% block css %}
+<style>
+
+.ui-w-80 {
+    width: 80px !important;
+    height: auto;
+}
+
+.btn-default {
+    border-color: rgba(24,28,33,0.1);
+    background: rgba(0,0,0,0);
+    color: #4E5155;
+}
+
+label.btn {
+    margin-bottom: 0;
+}
+
+.btn-outline-primary {
+    border-color: #26B4FF;
+    background: transparent;
+    color: #26B4FF;
+}
+
+.btn {
+    cursor: pointer;
+}
+
+.text-light {
+    color: #babbbc !important;
+}
+
+.btn-facebook {
+    border-color: rgba(0,0,0,0);
+    background: #3B5998;
+    color: #fff;
+}
+
+.btn-instagram {
+    border-color: rgba(0,0,0,0);
+    background: #000;
+    color: #fff;
+}
+
+.card {
+    background-clip: padding-box;
+    box-shadow: 0 1px 4px rgba(24,28,33,0.012);
+}
+
+.row-bordered {
+    overflow: hidden;
+}
+
+.account-settings-fileinput {
+    position: absolute;
+    visibility: hidden;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+.list-group .list-group-item.active {
+    font-weight: bold;
+    background: transparent;
+    color: #4e5155
+}
+
+.list-group .list-group-item {
+    padding: 0.85rem 1.5rem;
+    border-color: rgba(24, 28, 33, 0.03) !important;
+}
+
+input{
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    border: 1px solid #ced4da;
+    appearance: none;
+    margin-bottom: 1.25rem;
+    font-size: inherit;
+    font-weight: 400;
+    color: #666;
+    border-color: #E5E5E5;
+    border-radius: 0;
+    height: 1.875rem;
+    line-height: 1.875rem;
+    background: #FFF;
+}
+
+.booking_history {
+    width:100%
+}
+.booking_history tr th{
+    background-color: darkgoldenrod;
+    text-align: center;
+    border: 1px solid ghostwhite;
+}
+.booking_history .num {
+    text-align:right;
+}
+.booking_history > tfoot td{
+    text-align: right;
+    padding-right:2rem
+}
+
+</style>
+    <link href="{% static 'css/form-admin.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block content %}
+    <h4 class="font-weight-bold py-3 mb-4">
+      Account settings
+    </h4>
+    <div>
+      {% if messages %}
+          {% for message in messages %}
+              <div class="text-center alert alert-{{ message.tags }}">
+                  {{ message|safe }}
+              </div>
+          {% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="card overflow-hidden">
+      <div class="row no-gutters row-bordered row-border-light">
+        <div class="col-md-2 pt-0">
+          <div class="list-group list-group-flush account-settings-links">
+            <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general">General</a>
+            <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">Change password</a>
+            <a class="list-group-item list-group-item-action" data-toggle="list" href="#history">Booking history</a>
+
+          </div>
+        </div>
+        <div class="col-md-10">
+          <div class="tab-content">
+            <div class="tab-pane fade" id="account-general">
+
+              {% comment %} <div class="card-body media align-items-center">
+                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="d-block ui-w-80">
+                <div class="media-body ml-4">
+                  <label class="btn btn-outline-primary">
+                    Upload new photo
+                    <input type="file" class="account-settings-fileinput">
+                  </label> &nbsp;
+                  <button type="button" class="btn btn-default md-btn-flat">Reset</button>
+
+                  <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+                </div>
+              </div> {% endcomment %}
+              <hr class="border-light m-0">
+
+                <form method="POST" class="form-create m-0" action=''>
+                {% csrf_token %}
+                {{form}}
+                    <div class="text-right mt-3">
+                        <button type="submit" class="btn btn-darkgold">Save changes</button>&nbsp;
+                        <button type="reset" class="btn btn-default">Reset</button>
+                    </div>
+              </form>
+
+            </div>
+            <div class="tab-pane fade" id="account-change-password">
+              <form method="POST" class="form-create m-0 pb-2">
+                {% csrf_token %}
+                {{pass_form}}
+                    <div class="text-right mt-3">
+                        <button type="submit" class="btn btn-darkgold">Save changes</button>&nbsp;
+                        <button type="reset" class="btn btn-default">Reset</button>
+                    </div>
+              </form>
+            </div>
+            <div class="tab-pane fade p-3 active show" id="history">
+              <h1 class='text-darkgold'>My Bookings</h1>
+              <table class="booking_history text-center table table-striped" id="table">
+                  <thead>
+                  <tr>
+                      <th>Room</th>
+                      <th>Booking Date</th>
+                      <th>Check In</th>
+                      <th>Check Out</th>
+                      <th>Deposit</th>
+                      <th>Total</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for my_booking in my_bookings %}
+                    <tr>
+                      <td>{{ my_booking.room_number.room_type }}</td>
+                      <td>{{ my_booking.time.date }}</td>
+                      <td>{{ my_booking.date_from }}</td>
+                      <td>{{ my_booking.date_to }}</td>
+                      {% comment %} <td class='num'>{{ my_booking.date_from }}<b>$<b></td> {% endcomment %}
+                      <td class='num'>{{my_booking.depost}}<b>$</b></td>
+                      <td class='num'>{{ my_booking.cost }}<b>$</b></td>
+                      <td>{{ my_booking.get_status_display }}</td>
+                      <td>
+                      {% if my_booking.status == 'pending' or my_booking.status == 'confirmed'%}
+                        <a href="{% url 'profile' %}?rev={{ my_booking.id }}" class="btn btn-danger text-white bt-xs">Cancel</a>
+                      {% endif %}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                  <tfoot>
+                      <tr>
+                          <td colspan='9'>Total Bookings: {{ num_bookings}}</td>
+                      </tr>
+                  </tfoot>
+              </table>
+            </div> 
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock content %}
+
+{% block js %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#id_new_password2").keyup(function(){
+             if ($("#id_new_password1").val() != $("#id_new_password2").val()) {
+                 $(".help_text").html("Password do not match").css("color","red");
+             }else{
+                 $(".help_text").html("Password matched").css("color","green");
+            }
+      });
+});
+</script>
+
+
+{% comment %} <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script> {% endcomment %}
+{% endblock js %}

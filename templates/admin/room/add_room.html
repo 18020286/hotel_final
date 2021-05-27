@@ -1,0 +1,25 @@
+{% extends 'admin/admin_base.html' %}
+{% load static %}
+{% block title %}
+    Add Room
+{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/form-admin.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="text-center text-darkgold pb-5">Add Room</h1>
+                <form method="POST" enctype="multipart/form-data" class='form-create px-5'>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    
+                    <input type="submit" value="Create" class="btn">
+                </form>
+        <div class="mt-4">
+            <a href="{% url 'room_category' %}" class="btn btn-danger float-right">Go Back</a>
+        </div>
+
+    </div>
+{% endblock %}

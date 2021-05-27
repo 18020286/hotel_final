@@ -1,0 +1,126 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block title %}
+    Blog Management Page
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="text-center alert alert-{{ message.tags }}">
+                        {{ message|safe }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <section class="">
+            <h1 class="text-center text-darkgold pb-5">Account Management</h1>
+            <div>
+                <a class="btn btn-darkgold mb-2 mt-4" href="{% url 'admin-regis' %}">Add New Account</a>
+            </div>
+            <table class="table table-striped text-center">
+                <thead class='bg'>
+                <th width='100'>UserName</th>
+                <th width='200'>Name</th>
+                <th width='140'>Phone</th>
+                <th>Email</th>
+                <th width='130'>DoB</th>
+                <th width='130'>Last Login</th>
+                <th width='50'>Is Staff</th>
+                <th width="120">Actions</th>
+                </thead>
+                {% for account in accounts %}
+                    <tr>
+                        <td>{{ account.username }}</td>
+                        <td>{{ account.first_name }} {{ account.last_name }}</td>
+                        <td>{{ account.phone }}</td>
+                        <td>{{ account.email }}</td>
+                        <td>{{ account.dob }}</td>
+                        <td>{{ account.last_login }}</td>
+                        <td>{{ account.is_staff }}</td>
+                        <td >
+                            {% if account.is_active %}
+                                <a href="{% url 'admin-action' account.id 'deactive' %}">
+                                    <Button class="btn btn-danger" id='btn'>Deactive</Button>
+                                </a>
+                            {% else %}
+                                <a href="{% url 'admin-action' account.id 'active'%}">
+                                    <Button class="btn btn-success" id='btn'>Active</Button>
+                                </a>
+                                <a href="{% url 'admin-action' account.id 'delete'%}">
+                                    <Button class="btn btn-danger" id='btn'>Delete</Button>
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <hr>
+            <nav class="row justify-content-center">
+        <span class="col-sm-2 text-right">
+        {% if accounts.has_previous %}
+            <a class="swich-page" href="?page={{ accounts.previous_page_number }}"><i class="fas fa-backward"></i> Previous</a>
+        {% endif %}
+        </span>
+
+        <span class="col-sm-2 text-center">
+            Page {{ accounts.number }} of {{ accounts.paginator.num_pages }}.
+        </span>
+        <span class='col-sm-2'>
+        {% if accounts.has_next %}
+            <a class="swich-page" href="?page={{ accounts.next_page_number }}">Next <i class="fas fa-forward"></i></a>
+        {% endif %}
+        </span>
+        </nav>
+        </section>
+    </div>
+{% endblock %}
+
+{% block js %}
+{% comment %} <script>
+    /*
+        On submiting the form, send the POST ajax
+        request to server and after successfull submission
+        display the object.
+    */
+    $("#btn").keyup(function (e) {
+        // preventing from page reload and default actions
+        e.preventDefault();
+        // serialize the data for sending the form data.
+        var action = $(this).text();
+        // make POST ajax call
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'account-action' %}",
+            data: action,
+            success: function (response) {
+                // on successfull creating object
+                // 1. clear the form.
+                $("#friend-form").trigger('reset');
+                // 2. focus to nickname input 
+                $("#id_nick_name").focus();
+
+                // display the newly friend to table.
+                var instance = JSON.parse(response["instance"]);
+                var fields = instance[0]["fields"];
+                $("#my_friends tbody").prepend(
+                    `<tr>
+                    <td>${fields["nick_name"]||""}</td>
+                    <td>${fields["first_name"]||""}</td>
+                    <td>${fields["last_name"]||""}</td>
+                    <td>${fields["likes"]||""}</td>
+                    <td>${fields["dob"]||""}</td>
+                    <td>${fields["lives_in"]||""}</td>
+                    </tr>`
+                )
+            },
+            error: function (response) {
+                // alert the error if any error occured
+                alert(response["responseJSON"]["error"]);
+            }
+        })
+    })
+</script> {% endcomment %}
+{% endblock js %}
